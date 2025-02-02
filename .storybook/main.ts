@@ -26,6 +26,7 @@ const config: StorybookConfig = {
   async viteFinal(config) {
     return {
       ...config,
+      base: "/LetterBox-Generator/",
       resolve: {
         alias: [
           {

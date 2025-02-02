@@ -6,4 +6,5 @@ export const selectImageLottie = style({
 
   display: "flex",
   alignItems: "center",
+  pointerEvents: "none",
 });

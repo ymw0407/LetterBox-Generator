@@ -6,8 +6,13 @@ const selectImageLottieSrc: string =
 
 export const SelectImageLottie = () => {
   return (
-    <div class={styles.selectImageLottie}>
-      <DotLottieSolid src={selectImageLottieSrc} autoplay loop />
+    <div class={styles.selectImageLottie} draggable={false}>
+      <DotLottieSolid
+        src={selectImageLottieSrc}
+        autoplay
+        loop
+        draggable={false}
+      />
     </div>
   );
 };

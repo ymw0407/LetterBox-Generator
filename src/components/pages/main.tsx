@@ -25,6 +25,8 @@ Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu 
 
 const color = ["white", "black"];
 
+export const alloweFileTypes = ["image/png", "image/jpeg"];
+
 export const Main = () => {
   const [imageInfoList, setImageInfoList] = createSignal<ImageInfo[]>([]);
 
@@ -127,31 +129,41 @@ export const Main = () => {
     });
   };
 
+  const onDragHandler = (e: DragEvent) => {
+    e.preventDefault();
+  };
+
+  const onDragOverHandler = (e: DragEvent) => {
+    e.preventDefault();
+  };
+
   return (
-    <main class={styles.main}>
-      <MainTemplate title={title} description={description} />
-      <div class={styles.imageOptionContainer}>
-        <div class={styles.flexContainer}>
-          <ImageTemplate {...imageTemplateProps} />
+    <label for="file" ondrop={onDragHandler} ondragover={onDragOverHandler}>
+      <main class={styles.main}>
+        <MainTemplate title={title} description={description} />
+        <div class={styles.imageOptionContainer}>
+          <div class={styles.flexContainer}>
+            <ImageTemplate {...imageTemplateProps} />
+          </div>
+          <div class={styles.flexContainer}>
+            <OptionsTemplate {...optionsTemplateProps} />
+          </div>
         </div>
-        <div class={styles.flexContainer}>
-          <OptionsTemplate {...optionsTemplateProps} />
-        </div>
-      </div>
 
-      <div style={{ "margin-top": "1.5rem" }} />
+        <div style={{ "margin-top": "1.5rem" }} />
 
-      <div class={styles.generateButtonContainer}>
-        <div class={styles.gererateButton}>
-          <Button
-            text="Generate"
-            onClick={() => {
-              // console.log(imageInfoList());
-              handleClick();
-            }}
-          />
+        <div class={styles.generateButtonContainer}>
+          <div class={styles.gererateButton}>
+            <Button
+              text="Generate"
+              onClick={() => {
+                // console.log(imageInfoList());
+                handleClick();
+              }}
+            />
+          </div>
         </div>
-      </div>
-    </main>
+      </main>
+    </label>
   );
 };
