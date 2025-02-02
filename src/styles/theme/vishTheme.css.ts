@@ -2,11 +2,11 @@ import { createTheme, fontFace } from "@vanilla-extract/css";
 import { themeVars } from "./themeContract.css";
 
 const inter = fontFace({
-  src: 'url(fonts/InterVariable.woff2) format("truetype")',
+  src: 'url(/LetterBox-Generator/fonts/InterVariable.woff2) format("truetype")',
 });
 
 const pretendard = fontFace({
-  src: 'url(fonts/PretendardGOVVariable.woff2) format("truetype")',
+  src: 'url(/LetterBox-Generator/fonts/PretendardGOVVariable.woff2) format("truetype")',
 });
 
 export const vishTheme = createTheme(themeVars, {

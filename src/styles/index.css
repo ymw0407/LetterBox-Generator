@@ -1,6 +1,7 @@
 @font-face {
   font-family: "Pretendard";
-  src: url("fonts/PretendardGOVVariable.woff2") format("truetype");
+  src: url("/LetterBox-Generator/fonts/PretendardGOVVariable.woff2")
+    format("truetype");
 }
 
 :root {

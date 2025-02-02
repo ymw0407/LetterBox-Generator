@@ -63,6 +63,8 @@ export const title = style({
   fontWeight: "800",
 
   marginBottom: "0.3rem",
+
+  userSelect: "none",
 });
 
 export const description = style({
@@ -70,4 +72,6 @@ export const description = style({
   fontSize: "0.9rem",
   fontWeight: "400",
   letterSpacing: "-1px",
+
+  userSelect: "none",
 });
