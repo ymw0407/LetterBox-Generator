@@ -8,6 +8,8 @@ export const titleConatiner = style({
 
   width: "6rem",
   height: "2.5rem",
+  borderRadius: "4px",
+
   flexShrink: 0,
   backgroundColor: themeVars.color.primary[80],
 });
