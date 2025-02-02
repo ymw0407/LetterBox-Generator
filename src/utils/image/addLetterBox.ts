@@ -1,13 +1,13 @@
-import { Jimp, JimpMime } from "jimp";
+import { cssColorToHex, Jimp, JimpMime } from "jimp";
 
 export const addLetterBoxWithJimp = async (
-  file: File,
+  file: Blob,
   ratioX: number,
   ratioY: number,
-  addX: number = 0,
-  addY: number = 0,
-  color: number = 0xffffffff
+  add: number = 0,
+  color: string = "white"
 ) => {
+  // console.log(file);
   const buffer: ArrayBuffer = await file.arrayBuffer();
   const image = await Jimp.fromBuffer(buffer);
 
@@ -15,8 +15,8 @@ export const addLetterBoxWithJimp = async (
   const originalHeight = image.height;
   const targetAspectRatio = ratioX / ratioY;
 
-  const additionalWidth = Math.round((originalWidth * addX) / 100);
-  const additionalHeight = Math.round((originalHeight * addY) / 100);
+  const additionalWidth = Math.round((originalWidth * add) / 100);
+  const additionalHeight = Math.round((originalHeight * add) / 100);
 
   let paddedWidth = originalWidth + additionalWidth;
   let paddedHeight = originalHeight + additionalHeight;
@@ -30,8 +30,12 @@ export const addLetterBoxWithJimp = async (
     newWidth = Math.round(paddedHeight * targetAspectRatio);
   }
 
+  const colorHex = cssColorToHex(color);
+  console.log(color);
+  console.log(colorHex);
+
   const letterboxedImage = new Jimp({
-    color: color,
+    color: colorHex,
     width: newWidth,
     height: newHeight,
   });

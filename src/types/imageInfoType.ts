@@ -1,5 +1,5 @@
 export interface ImageInfo {
-  image: File;
+  image: Blob;
   imageBlob: string;
   exif: ExifInfo;
 }
