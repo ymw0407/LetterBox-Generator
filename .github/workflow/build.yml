@@ -1,17 +1,16 @@
-name: build
+name: Build and Deploy
 
 on:
   push:
-    branches: ["master"]
-  pull_request:
     branches: ["master"]
 
 jobs:
   build:
     runs-on: ubuntu-latest
+    environment: github-pages
     permissions:
       contents: write
-    timeout-minutes: 10
+
     steps:
       - name: Checkout source code
         uses: actions/checkout@v4
@@ -24,29 +23,15 @@ jobs:
       - name: Install pnpm
         run: npm install -g pnpm
 
-      - uses: actions/cache@v4
-        id: cache
-        with:
-          path: |
-            node_modules
-            .pnpm-store
-          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
-          restore-keys: |
-            ${{ runner.os }}-pnpm-store-
-
       - name: Install dependencies
         run: pnpm install --frozen-lockfile --prod
 
       - name: Build
         run: pnpm build
 
-      - name: Check Build Directory
-        run: ls -al ./dist
-
-      - name: Deploy Docs
+      - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./dist
-          force_orphan: true
-          enable_jekyll: false
+          publish_dir: dist
+          publish_branch: gh-pages
