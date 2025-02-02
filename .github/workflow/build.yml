@@ -1,15 +1,14 @@
 name: build
 
 on:
-	push:
-    branches: [ "master" ]
+  push:
+    branches: ["master"]
   pull_request:
     branches: ["master"]
 
 jobs:
   build:
     runs-on: ubuntu-latest
-    environment: github-pages
     permissions:
       contents: write
     timeout-minutes: 10
@@ -41,8 +40,13 @@ jobs:
       - name: Build
         run: pnpm build
 
+      - name: Check Build Directory
+        run: ls -al ./dist
+
       - name: Deploy Docs
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./dist
+          force_orphan: true
+          enable_jekyll: false
