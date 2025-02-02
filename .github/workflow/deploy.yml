@@ -1,12 +1,17 @@
-name: Deploy Page
+name: build
 
 on:
 	push:
-    	branches: [ "master" ]
+    branches: [ "master" ]
+  pull_request:
+    branches: ["master"]
 
 jobs:
   build:
     runs-on: ubuntu-latest
+    environment: github-pages
+    permissions:
+      contents: write
     timeout-minutes: 10
     steps:
       - name: Checkout source code
@@ -37,7 +42,7 @@ jobs:
         run: pnpm build
 
       - name: Deploy Docs
-        uses: peaceiris/actions-gh-pages@v3
+        uses: peaceiris/actions-gh-pages@v4
         with:
-          github_token: ${{ secrets.GH_ACTIONS_TOKEN }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./dist
