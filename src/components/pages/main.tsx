@@ -12,11 +12,7 @@ import {
 import { createEffect, createSignal } from "solid-js";
 import * as styles from "./main.css";
 import { Button } from "@components/atom/button/button";
-import exifr from "exifr";
-import Worker from "@/utils/worker/worker.ts?worker";
-import { LetterBoxPaddingOption } from "@components/organism/option";
 import { addLetterBoxWithJimp } from "@/utils/image/addLetterBox";
-import { Jimp } from "jimp";
 
 const title = {
   text: `레터박스 생성기`,
