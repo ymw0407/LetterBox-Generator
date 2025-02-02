@@ -1,7 +1,8 @@
 import * as styles from "./selectImageLottie.css";
 import { DotLottieSolid } from "@lottiefiles/dotlottie-solid";
 
-const selectImageLottieSrc: string = "/lottie/selectImage.lottie";
+const selectImageLottieSrc: string =
+  "/LetterBox-Generator/lottie/selectImage.lottie";
 
 export const SelectImageLottie = () => {
   return (
