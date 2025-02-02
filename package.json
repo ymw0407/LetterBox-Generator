@@ -1,8 +1,9 @@
 {
-  "name": "blog",
+  "name": "letter-box-generator",
   "private": true,
   "version": "0.0.0",
   "type": "module",
+  "homepage": "/letterboxGenerator",
   "scripts": {
     "dev": "vite --host",
     "build": "tsc -b && vite build",
@@ -30,6 +31,7 @@
     "@typescript-eslint/parser": "8.19.1",
     "@vanilla-extract/dynamic": "2.1.2",
     "@vanilla-extract/vite-plugin": "4.0.19",
+    "gh-pages": "6.3.0",
     "storybook": "8.6.0-alpha.2",
     "storybook-solidjs": "1.0.0-beta.6",
     "storybook-solidjs-vite": "1.0.0-beta.6",

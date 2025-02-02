@@ -4,6 +4,7 @@ import path from "path";
 import { vanillaExtractPlugin } from "@vanilla-extract/vite-plugin";
 
 export default defineConfig({
+  base: "/letterboxGenerator",
   plugins: [
     solid(),
     vanillaExtractPlugin({
