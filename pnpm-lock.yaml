@@ -12,7 +12,7 @@ importers:
         specifier: 0.0.32
         version: 0.0.32
       '@lottiefiles/dotlottie-solid':
-        specifier: ^0.1.6
+        specifier: 0.1.6
         version: 0.1.6(solid-js@1.9.4)
       '@solidjs/router':
         specifier: 0.15.2
