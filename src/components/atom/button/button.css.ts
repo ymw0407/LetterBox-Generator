@@ -13,6 +13,8 @@ export const button = style({
   background: themeVars.color.neutral.white,
   color: themeVars.color.primary[40],
 
+  cursor: "pointer",
+
   ":hover": {
     background: `linear-gradient(to right, 
     ${themeVars.color.primary[30]} 0%, 

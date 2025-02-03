@@ -7,4 +7,6 @@ export const titleStyleText = style({
   fontStyle: "normal",
   fontWeight: 800,
   lineHeight: "normal",
+
+  userSelect: "none",
 });

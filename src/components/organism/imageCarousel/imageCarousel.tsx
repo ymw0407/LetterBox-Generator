@@ -1,4 +1,4 @@
-import { Accessor, createEffect, createSignal, For } from "solid-js";
+import { Accessor, createEffect, createSignal, For, Show } from "solid-js";
 import * as styles from "./imageCarousel.css";
 import { IoChevronBackOutline, IoChevronForwardOutline } from "solid-icons/io";
 import { ImageInfo } from "@/types/imageInfoType";
@@ -39,7 +39,6 @@ export const ImageCarousel = (props: ImageCarouselProps) => {
     }
   };
 
-  // 첫 번째 렌더링 시 상태를 초기화
   createEffect(() => {
     const letterBoxStyleOption = props.getLetterBoxStyleOption();
     applyLetterBoxStyle(letterBoxStyleOption);
@@ -90,9 +89,6 @@ export const ImageCarousel = (props: ImageCarouselProps) => {
 
                     width: `100%`,
                     height: `100%`,
-
-                    // width: `calc(100%-${})`
-                    // padding: `${padding()}`,
                   }}
                 >
                   <img
@@ -100,7 +96,6 @@ export const ImageCarousel = (props: ImageCarouselProps) => {
                     class={styles.carouselImage}
                     style={{
                       padding: `${padding()}`,
-                      // width: `calc(100% - ${padding()})`,
                     }}
                   />
                 </div>
@@ -108,47 +103,51 @@ export const ImageCarousel = (props: ImageCarouselProps) => {
             </>
           )}
         </For>
-        <button>
-          <IoChevronBackOutline
-            class={styles.backCarousel}
-            color={themeVars.color.primary[30]}
-            onclick={() => {
-              if (carouselNumber() != 0) {
-                setCarouselNumber(carouselNumber() - 1);
-              } else {
-                setCarouselNumber(props.getImageInfoList().length - 1);
-              }
-            }}
-          />
-        </button>
-        <button>
-          <IoChevronForwardOutline
-            onclick={() => {
-              if (carouselNumber() != props.getImageInfoList().length - 1) {
-                setCarouselNumber(carouselNumber() + 1);
-              } else {
-                setCarouselNumber(0);
-              }
-            }}
-            class={styles.forwardCarousel}
-            color={themeVars.color.primary[30]}
-          />
-        </button>
-      </div>
-      <div class={styles.carouselDotList}>
-        <For each={props.getImageInfoList()}>
-          {(_, index: Accessor<number>) => (
-            <div
-              class={
-                index() == carouselNumber()
-                  ? styles.activateCarouselDot
-                  : styles.carouselDot
-              }
-              onclick={() => setCarouselNumber(index())}
+        <Show when={props.getImageInfoList().length > 1}>
+          <button>
+            <IoChevronBackOutline
+              class={styles.backCarousel}
+              color={themeVars.color.primary[30]}
+              onclick={() => {
+                if (carouselNumber() != 0) {
+                  setCarouselNumber(carouselNumber() - 1);
+                } else {
+                  setCarouselNumber(props.getImageInfoList().length - 1);
+                }
+              }}
             />
-          )}
-        </For>
+          </button>
+          <button>
+            <IoChevronForwardOutline
+              onclick={() => {
+                if (carouselNumber() != props.getImageInfoList().length - 1) {
+                  setCarouselNumber(carouselNumber() + 1);
+                } else {
+                  setCarouselNumber(0);
+                }
+              }}
+              class={styles.forwardCarousel}
+              color={themeVars.color.primary[30]}
+            />
+          </button>
+        </Show>
       </div>
+      <Show when={props.getImageInfoList().length > 1}>
+        <div class={styles.carouselDotList}>
+          <For each={props.getImageInfoList()}>
+            {(_, index: Accessor<number>) => (
+              <div
+                class={
+                  index() == carouselNumber()
+                    ? styles.activateCarouselDot
+                    : styles.carouselDot
+                }
+                onclick={() => setCarouselNumber(index())}
+              />
+            )}
+          </For>
+        </div>
+      </Show>
     </div>
   );
 };

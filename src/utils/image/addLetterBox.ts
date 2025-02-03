@@ -7,7 +7,6 @@ export const addLetterBoxWithJimp = async (
   add: number = 0,
   color: string = "white"
 ) => {
-  // console.log(file);
   const buffer: ArrayBuffer = await file.arrayBuffer();
   const image = await Jimp.fromBuffer(buffer);
 

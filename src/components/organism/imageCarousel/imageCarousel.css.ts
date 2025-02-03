@@ -37,14 +37,11 @@ export const rectangleContainer = style({
 });
 
 export const carouselImage = style({
-  // position: "relative",
-  // left: "-100%",
-
-  // position: "absolute",
-  // top: 0,
-
   objectFit: "contain",
   objectPosition: "center",
+  imageRendering: "pixelated",
+  width: "100%",
+  height: "100%",
 
   userSelect: "none",
 
@@ -62,7 +59,6 @@ export const backCarousel = style({
   height: "2rem",
 
   filter: "invert(100%)",
-  // mixBlendMode: "hard-light",
 
   ":hover": {
     transform: "scale(1.1)",
@@ -82,7 +78,6 @@ export const forwardCarousel = style({
   height: "2rem",
 
   filter: "invert(100%)",
-  // mixBlendMode: "hard-light",
 
   ":hover": {
     transform: "scale(1.1)",

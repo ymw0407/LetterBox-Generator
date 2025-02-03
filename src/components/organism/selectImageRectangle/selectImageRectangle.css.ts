@@ -3,6 +3,8 @@ import { style } from "@vanilla-extract/css";
 export const selectImageRectangle = style({
   width: "100%",
   height: "100%",
+
+  cursor: "pointer",
 });
 
 export const lottieContainer = style({

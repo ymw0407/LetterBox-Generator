@@ -19,7 +19,6 @@ export const selectorContainer = style({
   alignItems: "center",
 
   width: "100%",
-  // height: "1.5rem",
 
   paddingLeft: "0.5rem",
   paddingRight: "0.5rem",
@@ -30,6 +29,8 @@ export const selectorContainer = style({
   borderCollapse: "collapse",
   boxSizing: "border-box",
   margin: "-1px",
+
+  cursor: "pointer",
 
   ":hover": {
     backgroundColor: themeVars.color.primary[90],

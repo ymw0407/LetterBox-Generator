@@ -11,4 +11,6 @@ export const descriptionStyleText = style({
   lineHeight: "normal",
 
   whiteSpace: "pre-wrap",
+
+  userSelect: "none",
 });
