@@ -7,12 +7,10 @@ export const optionsTemplate = style({
 
   gap: "0.5rem",
   width: "100%",
-  // justifyContent: "flex-start",
 });
 
 export const option = style({
   width: "100%",
-  // maxWidth: "40rem",
   minWidth: "18.75rem",
 
   boxSizing: "border-box",

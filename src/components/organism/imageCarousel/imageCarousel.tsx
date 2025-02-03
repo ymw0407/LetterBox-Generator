@@ -39,7 +39,6 @@ export const ImageCarousel = (props: ImageCarouselProps) => {
     }
   };
 
-  // 첫 번째 렌더링 시 상태를 초기화
   createEffect(() => {
     const letterBoxStyleOption = props.getLetterBoxStyleOption();
     applyLetterBoxStyle(letterBoxStyleOption);
@@ -90,9 +89,6 @@ export const ImageCarousel = (props: ImageCarouselProps) => {
 
                     width: `100%`,
                     height: `100%`,
-
-                    // width: `calc(100%-${})`
-                    // padding: `${padding()}`,
                   }}
                 >
                   <img
@@ -100,7 +96,6 @@ export const ImageCarousel = (props: ImageCarouselProps) => {
                     class={styles.carouselImage}
                     style={{
                       padding: `${padding()}`,
-                      // width: `calc(100% - ${padding()})`,
                     }}
                   />
                 </div>
