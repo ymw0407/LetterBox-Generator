@@ -45,6 +45,9 @@ export const carouselImage = style({
 
   objectFit: "contain",
   objectPosition: "center",
+  imageRendering: "pixelated",
+  width: "100%",
+  height: "100%",
 
   userSelect: "none",
 
