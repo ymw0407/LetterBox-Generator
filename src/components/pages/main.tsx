@@ -1,4 +1,4 @@
-import { ImageInfo } from "@/types/imageInfoType";
+import { ImageInfo, ProcessedImageInfo } from "@/types/imageInfoType";
 import { RatioValueType } from "@components/molecule/selectorList/selectorList";
 import {
   ImageTemplate,
@@ -9,10 +9,13 @@ import {
   OptionsTemplate,
   OptionsTemplateProps,
 } from "@components/template/optionsTemplate/optionsTemplate";
-import { createEffect, createSignal } from "solid-js";
+import { createEffect, createSignal, Show } from "solid-js";
 import * as styles from "./main.css";
 import { Button } from "@components/atom/button/button";
-import { addLetterBoxWithJimp } from "@/utils/image/addLetterBox";
+import Worker from "@/utils/worker/worker.ts?worker";
+import JSZip from "jszip";
+import { createStore } from "solid-js/store";
+import { ErrorToast } from "@components/atom/toast/errorToast/errorToast";
 
 const title = {
   text: `레터박스 생성기`,
@@ -65,68 +68,47 @@ export const Main = () => {
     getLetterBoxPaddingOption: letterBoxPaddingOption,
   };
 
-  createEffect(() => {
-    console.log("------------------------");
-    console.log(imageInfoList());
-    console.log(letterBoxPaddingOption());
-    console.log(color[letterBoxStyleOption()]);
-    console.log("------------------------");
-  });
+  const [processedImageBase64List, setProcessedImageBase64List] = createStore<
+    ProcessedImageInfo[]
+  >([]);
 
-  // const generateHandler = (imageInfoList: ImageInfo[]) => {
-  //   imageInfoList.forEach((file) => {
-  //     const worker = new Worker();
+  const workerHandler = (imageInfo: ImageInfo) => {
+    const worker = new Worker();
 
-  //     worker.postMessage({
-  // file,
-  // ratioX: imageRatioOption().x,
-  // ratioY: imageRatioOption().y,
-  // padding: letterBoxPaddingOption(),
-  // color: color[letterBoxStyleOption()],
-  //     });
-
-  //     worker.onmessage = (e) => {
-  //       const { success, base64, error } = e.data;
-  //       if (success) {
-  //         const link = document.createElement("a");
-  //         link.href = base64;
-  //         link.download = `processed_image_${Date.now()}.png`;
-  //         link.click();
-  //       } else {
-  //         console.error(error);
-  //       }
-
-  //       worker.terminate();
-  //     };
-  //     exifr.parse(file.image).then((exif) => {
-  //       console.log(exif);
-  //     });
-  //   });
-  // };
-
-  const handleClick = () => {
-    // const currentImageInfoList = imageInfoList();
-    // console.log("Current imageInfoList on click:", currentImageInfoList);
-    // generateHandler(copiedImageInfoList);
-    imageInfoList().map((imageInfo: ImageInfo) => {
-      // file,
-      // ratioX: imageRatioOption().x,
-      // ratioY: imageRatioOption().y,
-      // padding: letterBoxPaddingOption(),
-      // color: color[letterBoxStyleOption()],
-      addLetterBoxWithJimp(
-        imageInfo.image,
-        imageRatioOption().x,
-        imageRatioOption().y,
-        letterBoxPaddingOption(),
-        color[letterBoxStyleOption()]
-      ).then((base64: string) => {
-        const link = document.createElement("a");
-        link.href = base64;
-        link.download = `processed_image_${Date.now()}.png`;
-        link.click();
-      });
+    worker.postMessage({
+      imageInfo: imageInfo,
+      ratioX: imageRatioOption().x,
+      ratioY: imageRatioOption().y,
+      padding: letterBoxPaddingOption(),
+      color: color[letterBoxStyleOption()],
     });
+
+    worker.onmessage = (e) => {
+      const { success, base64, fileName, error } = e.data;
+      if (success) {
+        setProcessedImageBase64List([
+          ...processedImageBase64List,
+          { fileName, base64 },
+        ]);
+      } else {
+        setLetterBoxErrorToastOn(true);
+        console.error(error);
+      }
+
+      worker.terminate();
+    };
+    //   // exifr.parse(file.image).then((exif) => {
+    //   //   console.log(exif);
+    //   // });
+    // });
+  };
+
+  const [zipErrorToastOn, setZipErrorToastOn] = createSignal<boolean>(false);
+  const [letterBoxErrorToastOn, setLetterBoxErrorToastOn] =
+    createSignal<boolean>(false);
+
+  const generateHandler = async (imageInfoList: ImageInfo[]) => {
+    imageInfoList.map((imageInfo: ImageInfo) => workerHandler(imageInfo));
   };
 
   const onDragHandler = (e: DragEvent) => {
@@ -136,6 +118,41 @@ export const Main = () => {
   const onDragOverHandler = (e: DragEvent) => {
     e.preventDefault();
   };
+
+  createEffect(async () => {
+    if (
+      processedImageBase64List.length == imageInfoList().length &&
+      imageInfoList().length != 0
+    ) {
+      try {
+        const zip = new JSZip();
+        for await (let processedImageBase64 of processedImageBase64List) {
+          zip.file(
+            `${processedImageBase64.fileName}_${Date.now()}.png`,
+            processedImageBase64.base64.replace(
+              /^data:image\/[a-zA-Z]+;base64,/,
+              ""
+            ),
+            { base64: true }
+          );
+        }
+
+        const blob: Blob = await zip.generateAsync({ type: "blob" });
+        const url = window.URL.createObjectURL(blob);
+        const link = document.createElement("a");
+        link.href = url;
+        link.download = `generated_image_${Date.now()}.zip`;
+        link.click();
+        link.remove();
+        window.URL.revokeObjectURL(url);
+        setImageInfoList([]);
+        setProcessedImageBase64List([]);
+      } catch {
+        setZipErrorToastOn(true);
+        setProcessedImageBase64List([]);
+      }
+    }
+  }, [processedImageBase64List]);
 
   return (
     <label for="file" ondrop={onDragHandler} ondragover={onDragOverHandler}>
@@ -157,12 +174,27 @@ export const Main = () => {
             <Button
               text="Generate"
               onClick={() => {
-                // console.log(imageInfoList());
-                handleClick();
+                generateHandler(imageInfoList());
               }}
             />
           </div>
         </div>
+        <Show when={!zipErrorToastOn}>
+          <ErrorToast
+            setToastOn={setZipErrorToastOn}
+            title="Error"
+            description="이미지 파일 압축 중에 오류가 발생했습니다."
+            sec={5}
+          />
+        </Show>
+        <Show when={!letterBoxErrorToastOn}>
+          <ErrorToast
+            setToastOn={setLetterBoxErrorToastOn}
+            title="Error"
+            description="레터박스 생성 중에 오류가 발생했습니다."
+            sec={5}
+          />
+        </Show>
       </main>
     </label>
   );

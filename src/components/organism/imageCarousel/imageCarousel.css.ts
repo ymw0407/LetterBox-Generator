@@ -107,6 +107,8 @@ export const carouselDot = style({
   background: themeVars.color.neutral.grey[90],
 
   transition: "all 0.3s ease-in-out",
+
+  cursor: "pointer",
 });
 
 export const activateCarouselDot = style({

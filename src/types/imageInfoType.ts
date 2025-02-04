@@ -1,4 +1,5 @@
 export interface ImageInfo {
+  fileName: string;
   image: Blob;
   imageBlob: string;
   exif: ExifInfo;
@@ -22,4 +23,9 @@ export interface ExifInfo {
   fNumber?: string; // 조리개 값
 
   createDate?: Date;
+}
+
+export interface ProcessedImageInfo {
+  fileName: string;
+  base64: string;
 }

@@ -1,13 +1,14 @@
+import { ImageInfo } from "@/types/imageInfoType";
 import { cssColorToHex, Jimp, JimpMime } from "jimp";
 
 export const addLetterBoxWithJimp = async (
-  file: Blob,
+  imageInfo: ImageInfo,
   ratioX: number,
   ratioY: number,
   add: number = 0,
   color: string = "white"
-) => {
-  const buffer: ArrayBuffer = await file.arrayBuffer();
+): Promise<string> => {
+  const buffer: ArrayBuffer = await imageInfo.image.arrayBuffer();
   const image = await Jimp.fromBuffer(buffer);
 
   const originalWidth = image.width;
@@ -30,8 +31,6 @@ export const addLetterBoxWithJimp = async (
   }
 
   const colorHex = cssColorToHex(color);
-  console.log(color);
-  console.log(colorHex);
 
   const letterboxedImage = new Jimp({
     color: colorHex,
