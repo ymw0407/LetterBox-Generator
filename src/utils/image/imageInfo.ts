@@ -24,6 +24,7 @@ export const parseImageList = async (
     const imageInfo: ImageInfo = {
       image: file,
       imageBlob: object,
+      fileName: file.name.substring(0, file.name.lastIndexOf(".")) || file.name,
       exif: {
         make: exif?.Make,
         model: exif?.Model,
