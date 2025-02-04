@@ -34,41 +34,41 @@ export const ColorIcon = (props: ColorIconProps) => {
     );
   };
 
-  const TransparentIcon = () => {
-    return (
-      <img
-        src="/image/transparent.png"
-        style={{
-          "user-select": "none",
-          width: "100%",
-          height: "100%",
-          "aspect-ratio": "1",
-          "object-fit": "cover",
-          display: "flex",
-          "align-items": "center",
-          "justify-content": "center",
-        }}
-      />
-    );
-  };
+  // const TransparentIcon = () => {
+  //   return (
+  //     <img
+  //       src="/image/transparent.png"
+  //       style={{
+  //         "user-select": "none",
+  //         width: "100%",
+  //         height: "100%",
+  //         "aspect-ratio": "1",
+  //         "object-fit": "cover",
+  //         display: "flex",
+  //         "align-items": "center",
+  //         "justify-content": "center",
+  //       }}
+  //     />
+  //   );
+  // };
 
-  const BlurHashIcon = () => {
-    return (
-      <img
-        src="/image/blurHash.png"
-        style={{
-          "user-select": "none",
-          width: "100%",
-          height: "100%",
-          "aspect-ratio": "1",
-          "object-fit": "cover",
-          display: "flex",
-          "align-items": "center",
-          "justify-content": "center",
-        }}
-      />
-    );
-  };
+  // const BlurHashIcon = () => {
+  //   return (
+  //     <img
+  //       src="/image/blurHash.png"
+  //       style={{
+  //         "user-select": "none",
+  //         width: "100%",
+  //         height: "100%",
+  //         "aspect-ratio": "1",
+  //         "object-fit": "cover",
+  //         display: "flex",
+  //         "align-items": "center",
+  //         "justify-content": "center",
+  //       }}
+  //     />
+  //   );
+  // };
 
   return (
     <div
@@ -85,12 +85,12 @@ export const ColorIcon = (props: ColorIconProps) => {
         <Match when={type() === "black"}>
           <BlackColorIcon />
         </Match>
-        <Match when={type() === "transparent"}>
+        {/* <Match when={type() === "transparent"}>
           <TransparentIcon />
         </Match>
         <Match when={type() === "blurHash"}>
           <BlurHashIcon />
-        </Match>
+        </Match> */}
       </Switch>
     </div>
   );

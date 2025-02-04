@@ -16,6 +16,7 @@ import Worker from "@/utils/worker/worker.ts?worker";
 import JSZip from "jszip";
 import { createStore } from "solid-js/store";
 import { ErrorToast } from "@components/atom/toast/errorToast/errorToast";
+import { LoadingModal } from "@components/molecule/loadingModal/loadingModal";
 
 const title = {
   text: `레터박스 생성기`,
@@ -107,6 +108,11 @@ export const Main = () => {
   const [letterBoxErrorToastOn, setLetterBoxErrorToastOn] =
     createSignal<boolean>(false);
 
+  const [isGenerating, setIsGenerating] = createSignal<boolean>(false);
+  const [isLoadingOn, setIsLoadingOn] = createSignal<boolean>(false);
+  const [isCompressing, setIsCompressing] = createSignal<boolean>(false);
+  const [percent, setPercent] = createSignal<number>(0);
+
   const generateHandler = async (imageInfoList: ImageInfo[]) => {
     imageInfoList.map((imageInfo: ImageInfo) => workerHandler(imageInfo));
   };
@@ -124,6 +130,7 @@ export const Main = () => {
       processedImageBase64List.length == imageInfoList().length &&
       imageInfoList().length != 0
     ) {
+      setIsCompressing(true);
       try {
         const zip = new JSZip();
         for await (let processedImageBase64 of processedImageBase64List) {
@@ -145,18 +152,48 @@ export const Main = () => {
         link.click();
         link.remove();
         window.URL.revokeObjectURL(url);
-        setImageInfoList([]);
-        setProcessedImageBase64List([]);
       } catch {
         setZipErrorToastOn(true);
         setProcessedImageBase64List([]);
+        setIsGenerating(false);
+        setIsCompressing(false);
       }
     }
   }, [processedImageBase64List]);
 
+  createEffect(() => {
+    if (isGenerating()) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "auto";
+    }
+  });
+
+  createEffect(() => {
+    if (imageInfoList().length != 0) {
+      setPercent(
+        Math.floor(
+          (processedImageBase64List.length / imageInfoList().length) * 100
+        )
+      );
+    }
+  });
+
+  createEffect(() => {
+    if (!isLoadingOn()) {
+      setImageInfoList([]);
+      setProcessedImageBase64List([]);
+      setIsGenerating(false);
+      setIsCompressing(false);
+    }
+  });
+
   return (
     <label for="file" ondrop={onDragHandler} ondragover={onDragOverHandler}>
-      <main class={styles.main}>
+      <main
+        class={styles.main}
+        style={isGenerating() ? { overflow: "hidden" } : {}}
+      >
         <MainTemplate title={title} description={description} />
         <div class={styles.imageOptionContainer}>
           <div class={styles.flexContainer}>
@@ -174,7 +211,11 @@ export const Main = () => {
             <Button
               text="Generate"
               onClick={() => {
-                generateHandler(imageInfoList());
+                if (imageInfoList().length != 0) {
+                  setIsGenerating(true);
+                  setIsLoadingOn(true);
+                  generateHandler(imageInfoList());
+                }
               }}
             />
           </div>
@@ -193,6 +234,16 @@ export const Main = () => {
             title="Error"
             description="레터박스 생성 중에 오류가 발생했습니다."
             sec={5}
+          />
+        </Show>
+
+        <Show when={isLoadingOn()}>
+          <LoadingModal
+            isGenerating={isGenerating}
+            isCompressing={isCompressing}
+            getPercent={percent}
+            setPercent={setPercent}
+            setIsLoadingOn={setIsLoadingOn}
           />
         </Show>
       </main>
