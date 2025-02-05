@@ -5,5 +5,5 @@ export interface DescriptionStyleTextProps {
 }
 
 export const DescriptionStyleText = (props: DescriptionStyleTextProps) => {
-  return <p class={styles.descriptionStyleText}>{props.text}</p>;
+  return <span class={styles.descriptionStyleText}>{props.text}</span>;
 };
