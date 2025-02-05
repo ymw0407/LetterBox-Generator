@@ -1,10 +1,10 @@
 import {
-  DescriptionStyleText,
   DescriptionStyleTextProps,
   TitleStyleText,
   TitleStyleTextProps,
 } from "@components/atom/text";
 import * as styles from "./mainTemplate.css";
+import { Description } from "@components/molecule/description/description";
 
 export interface MainTemplateProps {
   title: TitleStyleTextProps;
@@ -17,7 +17,7 @@ export const MainTemplate = (props: MainTemplateProps) => {
       <div class={styles.titleContainer}>
         <TitleStyleText {...props.title} />
       </div>
-      <DescriptionStyleText {...props.description} />
+      <Description />
     </div>
   );
 };

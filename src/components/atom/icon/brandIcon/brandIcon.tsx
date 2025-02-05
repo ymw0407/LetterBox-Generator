@@ -1,16 +1,18 @@
 import { IconTypes } from "solid-icons";
-import { AiOutlinePrinter } from "solid-icons/ai";
+import { AiFillGithub, AiFillMail, AiOutlinePrinter } from "solid-icons/ai";
 import { IoLogoInstagram, IoLogoYoutube } from "solid-icons/io";
 
 export interface BrandIconProps {
-  brand?: "instagram" | "youtube" | "printer";
+  brand?: "instagram" | "youtube" | "printer" | "github" | "mail";
 }
 
 export const BrandIcon = (props: BrandIconProps) => {
   const brandIconMap = new Map<string, IconTypes>()
     .set("instagram", IoLogoInstagram)
     .set("youtube", IoLogoYoutube)
-    .set("printer", AiOutlinePrinter);
+    .set("printer", AiOutlinePrinter)
+    .set("github", AiFillGithub)
+    .set("mail", AiFillMail);
 
   const IconComponent = props.brand ? brandIconMap.get(props.brand) : null;
 
