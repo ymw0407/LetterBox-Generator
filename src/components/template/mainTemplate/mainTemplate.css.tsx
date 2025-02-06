@@ -2,6 +2,7 @@ import { style } from "@vanilla-extract/css";
 
 export const titleContainer = style({
   marginBottom: "1rem",
+  cursor: "pointer",
 });
 
 export const imageConatiner = style({

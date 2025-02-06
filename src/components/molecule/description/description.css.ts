@@ -3,7 +3,7 @@ import { style } from "@vanilla-extract/css";
 
 export const serviceNameText = style({
   fontFamily: themeVars.font.family.pretendard,
-  fontSize: "0.75rem",
+  fontSize: "0.9rem",
   fontStyle: "normal",
   fontWeight: 900,
   lineHeight: "normal",
@@ -18,7 +18,7 @@ export const serviceNameText = style({
 
 export const aText = style({
   fontFamily: themeVars.font.family.pretendard,
-  fontSize: "0.75rem",
+  fontSize: "0.9rem",
   fontStyle: "normal",
   fontWeight: 600,
   lineHeight: "normal",
@@ -38,6 +38,6 @@ export const aText = style({
 });
 
 export const pText = style({
-  marginTop: "0.1rem",
-  marginBottom: "0.1rem",
+  marginTop: "0.2rem",
+  marginBottom: "0.2rem",
 });
