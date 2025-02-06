@@ -107,6 +107,8 @@ export const Main = () => {
   const [zipErrorToastOn, setZipErrorToastOn] = createSignal<boolean>(false);
   const [letterBoxErrorToastOn, setLetterBoxErrorToastOn] =
     createSignal<boolean>(false);
+  const [nothingToGenerateToastOn, setNothingToGenerateToastOn] =
+    createSignal<boolean>(false);
 
   const [isGenerating, setIsGenerating] = createSignal<boolean>(false);
   const [isLoadingOn, setIsLoadingOn] = createSignal<boolean>(false);
@@ -188,13 +190,23 @@ export const Main = () => {
     }
   });
 
+  const refreshPage = () => {
+    window.location.reload();
+  };
+
   return (
     <label for="file" ondrop={onDragHandler} ondragover={onDragOverHandler}>
       <main
         class={styles.main}
         style={isGenerating() ? { overflow: "hidden" } : {}}
       >
-        <MainTemplate title={title} description={description} />
+        <MainTemplate
+          title={title}
+          description={description}
+          clickTitleFunction={() => {
+            refreshPage();
+          }}
+        />
         <div class={styles.imageOptionContainer}>
           <div class={styles.flexContainer}>
             <ImageTemplate {...imageTemplateProps} />
@@ -215,12 +227,14 @@ export const Main = () => {
                   setIsGenerating(true);
                   setIsLoadingOn(true);
                   generateHandler(imageInfoList());
+                } else {
+                  setNothingToGenerateToastOn(true);
                 }
               }}
             />
           </div>
         </div>
-        <Show when={!zipErrorToastOn}>
+        <Show when={zipErrorToastOn()}>
           <ErrorToast
             setToastOn={setZipErrorToastOn}
             title="Error"
@@ -228,7 +242,7 @@ export const Main = () => {
             sec={5}
           />
         </Show>
-        <Show when={!letterBoxErrorToastOn}>
+        <Show when={letterBoxErrorToastOn()}>
           <ErrorToast
             setToastOn={setLetterBoxErrorToastOn}
             title="Error"
@@ -236,7 +250,14 @@ export const Main = () => {
             sec={5}
           />
         </Show>
-
+        <Show when={nothingToGenerateToastOn()}>
+          <ErrorToast
+            setToastOn={setNothingToGenerateToastOn}
+            title="Error"
+            description="생성할 이미지가 없습니다."
+            sec={5}
+          />
+        </Show>
         <Show when={isLoadingOn()}>
           <LoadingModal
             isGenerating={isGenerating}
