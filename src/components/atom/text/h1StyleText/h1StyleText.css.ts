@@ -10,4 +10,9 @@ export const h1StyleText = style({
   lineHeight: "normal",
 
   userSelect: "none",
+
+  height: "100%",
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "center",
 });
