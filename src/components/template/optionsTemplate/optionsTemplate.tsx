@@ -110,6 +110,17 @@ const imageRatioOptionList: SelectorListType<RatioValueType>[] = [
     },
     component: imageRatioTextComponent("4 : 3"),
   },
+  {
+    icon: {
+      brand: "printer",
+    },
+    key: "Photo Paper - PostCard",
+    value: {
+      x: 3,
+      y: 4,
+    },
+    component: imageRatioTextComponent("3 : 4"),
+  },
 ];
 
 export const OptionsTemplate = (props: OptionsTemplateProps) => {

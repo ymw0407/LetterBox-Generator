@@ -17,6 +17,7 @@ import JSZip from "jszip";
 import { createStore } from "solid-js/store";
 import { ErrorToast } from "@components/atom/toast/errorToast/errorToast";
 import { LoadingModal } from "@components/molecule/loadingModal/loadingModal";
+import { addLetterBoxWithCanvas } from "@/utils/image/addLetterBox";
 
 const title = {
   text: `레터박스 생성기`,
@@ -85,11 +86,15 @@ export const Main = () => {
     });
 
     worker.onmessage = (e) => {
-      const { success, base64, fileName, error } = e.data;
+      const { success, blob, fileName, error } = e.data;
+      console.log(success);
+      console.log(blob);
+      console.log(fileName);
+      console.log(error);
       if (success) {
         setProcessedImageBase64List([
           ...processedImageBase64List,
-          { fileName, base64 },
+          { fileName, blob },
         ]);
       } else {
         setLetterBoxErrorToastOn(true);
@@ -116,6 +121,15 @@ export const Main = () => {
   const [percent, setPercent] = createSignal<number>(0);
 
   const generateHandler = async (imageInfoList: ImageInfo[]) => {
+    // imageInfoList.map(async (imageInfo: ImageInfo) => {
+    //   await addLetterBoxWithCanvas(
+    //     imageInfo,
+    //     imageRatioOption().x,
+    //     imageRatioOption().y,
+    //     letterBoxPaddingOption(),
+    //     color[letterBoxStyleOption()]
+    //   );
+    // });
     imageInfoList.map((imageInfo: ImageInfo) => workerHandler(imageInfo));
   };
 
@@ -138,10 +152,7 @@ export const Main = () => {
         for await (let processedImageBase64 of processedImageBase64List) {
           zip.file(
             `${processedImageBase64.fileName}_${Date.now()}.png`,
-            processedImageBase64.base64.replace(
-              /^data:image\/[a-zA-Z]+;base64,/,
-              ""
-            ),
+            processedImageBase64.blob,
             { base64: true }
           );
         }
