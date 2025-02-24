@@ -36,6 +36,7 @@ export const Main = () => {
 
   const [letterBoxStyleOption, setLetterBoxStyleOption] =
     createSignal<number>(0);
+  const [frameDesignOption, setFrameDesignOption] = createSignal<number>(0);
   const [imageRatioOption, setimageRatioOption] = createSignal<RatioValueType>({
     x: 4,
     y: 3,
@@ -47,6 +48,10 @@ export const Main = () => {
     letterBoxStyleOption: {
       getValue: letterBoxStyleOption,
       setValue: setLetterBoxStyleOption,
+    },
+    frameDesignOption: {
+      getValue: frameDesignOption,
+      setValue: setFrameDesignOption,
     },
     imageRatioOption: {
       getValue: imageRatioOption,
@@ -82,14 +87,15 @@ export const Main = () => {
       ratioY: imageRatioOption().y,
       padding: letterBoxPaddingOption(),
       color: color[letterBoxStyleOption()],
+      letterBoxFrame: frameDesignOption(),
     });
 
     worker.onmessage = (e) => {
-      const { success, base64, fileName, error } = e.data;
+      const { success, blob, fileName, error } = e.data;
       if (success) {
         setProcessedImageBase64List([
           ...processedImageBase64List,
-          { fileName, base64 },
+          { fileName, blob },
         ]);
       } else {
         setLetterBoxErrorToastOn(true);
@@ -98,10 +104,6 @@ export const Main = () => {
 
       worker.terminate();
     };
-    //   // exifr.parse(file.image).then((exif) => {
-    //   //   console.log(exif);
-    //   // });
-    // });
   };
 
   const [zipErrorToastOn, setZipErrorToastOn] = createSignal<boolean>(false);
@@ -116,6 +118,15 @@ export const Main = () => {
   const [percent, setPercent] = createSignal<number>(0);
 
   const generateHandler = async (imageInfoList: ImageInfo[]) => {
+    // imageInfoList.map(async (imageInfo: ImageInfo) => {
+    //   await addLetterBoxWithCanvas(
+    //     imageInfo,
+    //     imageRatioOption().x,
+    //     imageRatioOption().y,
+    //     letterBoxPaddingOption(),
+    //     color[letterBoxStyleOption()]
+    //   );
+    // });
     imageInfoList.map((imageInfo: ImageInfo) => workerHandler(imageInfo));
   };
 
@@ -138,10 +149,7 @@ export const Main = () => {
         for await (let processedImageBase64 of processedImageBase64List) {
           zip.file(
             `${processedImageBase64.fileName}_${Date.now()}.png`,
-            processedImageBase64.base64.replace(
-              /^data:image\/[a-zA-Z]+;base64,/,
-              ""
-            ),
+            processedImageBase64.blob,
             { base64: true }
           );
         }

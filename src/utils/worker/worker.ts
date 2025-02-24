@@ -1,5 +1,6 @@
 import { ImageInfo } from "@/types/imageInfoType";
-import { addLetterBoxWithJimp } from "@/utils/image/addLetterBox";
+import { LetterBoxOptionType } from "@/types/letterBoxOptionType";
+import { addLetterBoxWithCanvas } from "@/utils/image/addLetterBox";
 
 type MessageData = {
   imageInfo: ImageInfo;
@@ -7,24 +8,30 @@ type MessageData = {
   ratioY: number;
   padding: number;
   color: string;
+  letterBoxFrame?: number;
 };
 
 self.onmessage = async (e: MessageEvent) => {
   try {
     const messageData: MessageData = e.data;
-    const base64: string = await addLetterBoxWithJimp(
-      messageData.imageInfo,
-      messageData.ratioX,
-      messageData.ratioY,
-      messageData.padding,
-      messageData.color
-    );
+    const letterBoxOption: LetterBoxOptionType = {
+      ratioX: messageData.ratioX,
+      ratioY: messageData.ratioY,
 
-    self.postMessage({
-      success: true,
-      base64,
-      fileName: messageData.imageInfo.fileName,
-    });
+      letterBoxColor: messageData.color,
+
+      paddingPercent: messageData.padding,
+      letterBoxFrame: messageData.letterBoxFrame,
+    };
+    addLetterBoxWithCanvas(messageData.imageInfo, letterBoxOption).then(
+      (blob: Blob) => {
+        self.postMessage({
+          success: true,
+          blob,
+          fileName: messageData.imageInfo.fileName,
+        });
+      }
+    );
   } catch (error) {
     self.postMessage({ success: false, error });
   }

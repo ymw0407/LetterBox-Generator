@@ -27,5 +27,5 @@ export interface ExifInfo {
 
 export interface ProcessedImageInfo {
   fileName: string;
-  base64: string;
+  blob: Blob;
 }

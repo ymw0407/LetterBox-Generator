@@ -36,7 +36,7 @@ export const parseImageList = async (
         exposureTime: exif?.ExposureTime,
         parsedShutterSpeed: parsedExposureTime,
         focalLength: exif?.FocalLength ? `${exif.FocalLength}mm` : undefined,
-        iso: exif?.ISO ? `ISO${exif.ISO}` : undefined,
+        iso: exif?.ISO ? `ISO ${exif.ISO}` : undefined,
         fNumber: exif?.FNumber ? `f/${exif.FNumber}` : undefined,
         createDate: date || new Date(),
       },
