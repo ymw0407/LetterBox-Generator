@@ -18,6 +18,10 @@ export interface OptionsTemplateProps {
     getValue: Accessor<number>;
     setValue: Setter<number>;
   };
+  frameDesignOption: {
+    getValue: Accessor<number>;
+    setValue: Setter<number>;
+  };
   imageRatioOption: {
     getValue: Accessor<RatioValueType>;
     setValue: Setter<RatioValueType>;
@@ -53,6 +57,19 @@ const letterBoxStyleOptionList: SelectorListType<number>[] = [
   //   value: 3,
   //   component: ColorIconContainer(ColorIcon({ type: "blurHash" })),
   // },
+];
+
+const frameDesignOptionList: SelectorListType<number>[] = [
+  {
+    key: "none",
+    value: 0,
+    component: <div></div>,
+  },
+  {
+    key: "Frame1",
+    value: 1,
+    component: <div></div>,
+  },
 ];
 
 const imageRatioTextComponent = (ratioString: string) => {
@@ -103,7 +120,7 @@ const imageRatioOptionList: SelectorListType<RatioValueType>[] = [
     icon: {
       brand: "printer",
     },
-    key: "Photo Paper - PostCard",
+    key: "Photo Paper - PostCard(4x3)",
     value: {
       x: 4,
       y: 3,
@@ -114,12 +131,34 @@ const imageRatioOptionList: SelectorListType<RatioValueType>[] = [
     icon: {
       brand: "printer",
     },
-    key: "Photo Paper - PostCard",
+    key: "Photo Paper - PostCard(3x4)",
     value: {
       x: 3,
       y: 4,
     },
     component: imageRatioTextComponent("3 : 4"),
+  },
+  {
+    icon: {
+      brand: "printer",
+    },
+    key: "Photo Paper - PostCard(6x4)",
+    value: {
+      x: 6,
+      y: 4,
+    },
+    component: imageRatioTextComponent("6 : 4"),
+  },
+  {
+    icon: {
+      brand: "printer",
+    },
+    key: "Photo Paper - PostCard(4x6)",
+    value: {
+      x: 4,
+      y: 6,
+    },
+    component: imageRatioTextComponent("4 : 6"),
   },
 ];
 
@@ -131,6 +170,13 @@ export const OptionsTemplate = (props: OptionsTemplateProps) => {
           title="레터박스 스타일"
           selectorList={letterBoxStyleOptionList}
           setValue={props.letterBoxStyleOption.setValue}
+        />
+      </div>
+      <div class={styles.option}>
+        <CommonOption
+          title="프레임 디자인"
+          selectorList={frameDesignOptionList}
+          setValue={props.frameDesignOption.setValue}
         />
       </div>
       <div class={styles.option}>

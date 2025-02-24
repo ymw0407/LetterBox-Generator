@@ -17,7 +17,6 @@ import JSZip from "jszip";
 import { createStore } from "solid-js/store";
 import { ErrorToast } from "@components/atom/toast/errorToast/errorToast";
 import { LoadingModal } from "@components/molecule/loadingModal/loadingModal";
-import { addLetterBoxWithCanvas } from "@/utils/image/addLetterBox";
 
 const title = {
   text: `레터박스 생성기`,
@@ -37,6 +36,7 @@ export const Main = () => {
 
   const [letterBoxStyleOption, setLetterBoxStyleOption] =
     createSignal<number>(0);
+  const [frameDesignOption, setFrameDesignOption] = createSignal<number>(0);
   const [imageRatioOption, setimageRatioOption] = createSignal<RatioValueType>({
     x: 4,
     y: 3,
@@ -48,6 +48,10 @@ export const Main = () => {
     letterBoxStyleOption: {
       getValue: letterBoxStyleOption,
       setValue: setLetterBoxStyleOption,
+    },
+    frameDesignOption: {
+      getValue: frameDesignOption,
+      setValue: setFrameDesignOption,
     },
     imageRatioOption: {
       getValue: imageRatioOption,
@@ -83,14 +87,11 @@ export const Main = () => {
       ratioY: imageRatioOption().y,
       padding: letterBoxPaddingOption(),
       color: color[letterBoxStyleOption()],
+      letterBoxFrame: frameDesignOption(),
     });
 
     worker.onmessage = (e) => {
       const { success, blob, fileName, error } = e.data;
-      console.log(success);
-      console.log(blob);
-      console.log(fileName);
-      console.log(error);
       if (success) {
         setProcessedImageBase64List([
           ...processedImageBase64List,
@@ -103,10 +104,6 @@ export const Main = () => {
 
       worker.terminate();
     };
-    //   // exifr.parse(file.image).then((exif) => {
-    //   //   console.log(exif);
-    //   // });
-    // });
   };
 
   const [zipErrorToastOn, setZipErrorToastOn] = createSignal<boolean>(false);
