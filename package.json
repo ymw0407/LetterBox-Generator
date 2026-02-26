@@ -33,7 +33,7 @@
     "@vanilla-extract/dynamic": "2.1.2",
     "@vanilla-extract/vite-plugin": "4.0.19",
     "gh-pages": "6.3.0",
-    "storybook": "8.6.0-alpha.2",
+    "storybook": "8.6.17",
     "storybook-solidjs": "1.0.0-beta.6",
     "storybook-solidjs-vite": "1.0.0-beta.6",
     "typescript": "5.7.2",
